@@ -1,5 +1,7 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
+const express = require('express')
+const app=express();
 
 const connectDB = async () => {
   try {
@@ -7,10 +9,9 @@ const connectDB = async () => {
     .then(
         console.log("Connection is succesfully created")
     );
-    console.log("✅ MongoDB Connected to Cloud");
+    console.log("MongoDB Connected to Cloud");
   } catch (err) {
-    console.error("❌ MongoDB connection error:", err);
-    process.exit(1);
+    console.error("MongoDB connection error:", err);
   }
 };
 
@@ -27,14 +28,14 @@ const model=mongoose.model('user',userSchema);
 //   await connectDB();
 
 //   const user = await model.insertMany([{
-//         name: "Abdul Qudoos",
+//         name: "Ahmad",
 //         age: 21,
-//         dep: "BSCS"
+//         dep: "BSSE"
 //       },
 //       {
-//         name: "Abdul Qudoos",
+//         name: "Hamza",
 //         age: 21,
-//         dep: "BSCS"
+//         dep: "BSAI"
 //       }
 // ]);
 
@@ -42,22 +43,30 @@ const model=mongoose.model('user',userSchema);
 // })();
 
 
+// const readData = async () =>
+// {
+//     await connectDB();
+//     const user = await model.find({name:"Abdul Qudoos"}).select({_id:0,name:1}).limit(1);
+//     console.log(user);
+//     await mongoose.connection.close();
+// }       
 
-// (async () => {
-//   await connectDB();
-//   const singleUser = await model.find();
-//   console.log("🔍 Single user:", singleUser);
 
-//   process.exit();
-// })();
-
-
-const readData = async () =>
-{
+const total_doc = async()=>{
     await connectDB();
-    const user=await model.find({name:"Abdul Qudoos"}).select({_id:0,name:1}).limit(1);
-    console.log(user);
-    process.exit()
+    const count = await model.countDocuments({dep:"BSCS"});
+    console.log(`Total number of students in BSCS is: ${count}`);
+    await mongoose.connection.close();
+}
+function start()
+{
+  console.log(`server is started`);
 }
 
-readData()
+app.listen(3000,()=>{
+  console.log("Server is listening on port http://localhost/3000")
+})
+
+total_doc();
+// readData()
+start()
